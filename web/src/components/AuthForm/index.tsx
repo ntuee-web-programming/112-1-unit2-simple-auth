@@ -17,7 +17,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { signInApi, signUpApi } from "@/lib/utils/api";
 
-const AuthForm = () => {
+function AuthForm() {
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -172,6 +172,6 @@ const AuthForm = () => {
       </form>
     </Card>
   );
-};
+}
 
 export default AuthForm;

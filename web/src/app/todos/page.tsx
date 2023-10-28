@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 
-import { Todo } from "@package/types/db";
+import { type Todo } from "@package/types/db";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const Todos = () => {
+function Todos() {
   const [content, setContent] = useState("");
   const [todos, setTodos] = useState<Omit<Todo, "userId">[]>([]);
   useEffect(() => {
@@ -71,6 +71,6 @@ const Todos = () => {
       </div>
     </main>
   );
-};
+}
 
 export default Todos;
