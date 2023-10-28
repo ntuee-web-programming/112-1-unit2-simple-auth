@@ -1,4 +1,4 @@
-import { User } from "./db";
+import { Todo, User } from "./db";
 
 export type SignUpRequest = {
   email: User["email"];
@@ -15,3 +15,11 @@ export type SignInRequest = {
   password: string;
 };
 export type SignInResponse = SignUpResponse;
+
+export type GetTodosRequest = {
+  userId: User["id"];
+};
+export type GetTodosResponse = Omit<Todo, "userId">[];
+
+export type CreateTodoRequest = Todo;
+export type CreateTodoResponse = Omit<Todo, "userId">;

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
@@ -9,12 +11,10 @@ import { useToast } from "../ui/use-toast";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { signInApi, signUpApi } from "@/lib/utils/api";
 
 const AuthForm = () => {
@@ -24,6 +24,7 @@ const AuthForm = () => {
   const [password, setPassowrd] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleClear = () => {
     setEmail("");
@@ -34,7 +35,15 @@ const AuthForm = () => {
   const handleSignIn = async () => {
     // handle sign in
     try {
-      await signInApi({ email, password });
+      const {
+        user: { id },
+      } = await signInApi({ email, password });
+      toast({
+        title: "Success",
+        description: "Sign in successful",
+      });
+      localStorage.setItem("userId", id);
+      router.push("/todos");
     } catch (error) {
       toast({
         title: "Error",
@@ -65,7 +74,15 @@ const AuthForm = () => {
       return;
     }
     try {
-      await signUpApi({ email, name, password });
+      const {
+        user: { id },
+      } = await signUpApi({ email, name, password });
+      localStorage.setItem("userId", id);
+      toast({
+        title: "Success",
+        description: "Sign up successful",
+      });
+      router.push("/todos");
     } catch (error) {
       toast({
         title: "Error",

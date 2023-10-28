@@ -154,6 +154,15 @@ In the `server` folder, follow the below instructions to setup Prettier and ESLi
     * What format do you want your config file to be in? · `JSON`
     * Would you like to install them now? · `Yes`
     * Which package manager do you want to use? · `yarn`
+5. Add `lint` and `format` scripts to `package.json`
+    ```json
+    {
+        "scripts": {
+            "lint": "eslint .",
+            "format": "prettier --write ."
+        },
+    }
+    ```
 
 ### ExpressJS setup
 1. Install ExpressJS
@@ -161,14 +170,13 @@ In the `server` folder, follow the below instructions to setup Prettier and ESLi
     yarn add express cors body-parser nodemon dotenv
     yarn add -D @types/express @types/cors @types/body-parser
     ```
-2. Add `start`, `dev`, `lint`, and `format` scripts to `package.json`
+2. Add `start` and `dev` scripts to `package.json`
     ```json
     {
         "scripts": {
             "start":"ts-node src/index.ts",
             "dev": "nodemon src/index.ts",
-            "lint": "eslint .",
-            "format": "prettier --write ."
+            ...
         },
     }
     ```
@@ -198,3 +206,93 @@ In the `server` folder, follow the below instructions to setup Prettier and ESLi
     ```
 
 If you completed all the steps above, you should be able to run `yarn dev` in the `./server` folder and you will see "Hello World!" at `http://localhost:<YOUR PORT NUMBER>` in your browser.
+
+### Drizzle setup
+1. Install drizzle
+    ```bash
+    yarn add drizzle-orm pg
+    yarn add -D drizzle-kit @types/pg
+    ```
+2. Add `POSTGRES_URL` to `.env`:
+    ```text
+    ...
+    POSTGRES_URL=postgres://postgres:postgres@localhost:5432/simple-auth
+    ```
+2. Add the following lines to `server/src/db/index.ts`:
+    ```ts
+    import { drizzle } from "drizzle-orm/node-postgres";
+    import { Pool } from "pg";
+
+    const pool = new Pool({
+        connectionString: <POSTGRES_URL> // Get the POSTGRES_URL from .env
+    });
+
+    export const db = drizzle(pool);
+    ```
+3. Create `docker-compse.yml` in the `server` folder:
+    ```yml
+    version: "3.1"
+
+    services:
+    postgresql:
+        image: postgres
+        environment:
+        POSTGRES_DB: simple-auth
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        PGDATA: /var/lib/postgresql/data
+        volumes:
+        - ./pg-data:/var/lib/postgresql/data
+        ports:
+        - "5432:5432"
+
+    # adminer is a simple frontend for you to interact with the database
+    adminer:
+        image: adminer
+        ports:
+        - 8080:8080
+    ```
+4. Run `docker-compose up` to start the database
+    ```bash
+    docker compose up -d
+    ```
+5. Add `migrate` script to `package.json`
+    ```json
+    {
+        "scripts": {
+            ...
+            "migrate": "drizzle-kit push:pg"
+        },
+    }
+    ```
+6. Add `pg-data` to `.gitignore`:
+    ```text
+    ...
+    pg-data
+    ```
+7. Add `drizzle.config.ts` in the `server` folder:
+    ```ts
+   import dotenv from "dotenv";
+    import type { Config } from "drizzle-kit";
+
+    // this file is for drizzle-kit, which is used to do our database migrations
+    dotenv.config({ path: "./.env" });
+
+    if (!process.env.POSTGRES_URL) {
+    throw new Error("POSTGRES_URL must be defined in .env");
+    }
+
+    export default {
+    schema: "./src/db/schema.ts",
+    out: "./drizzle",
+    driver: "pg",
+    dbCredentials: { connectionString: process.env.POSTGRES_URL },
+    } satisfies Config;
+    ```
+    Note that all your schemas should be kept in `./src/db/schema.ts` file. 
+
+8. Create `server/src/db/schema.ts` file
+9. Whenever you create or update a schema, you need to run `yarn migrate` to update the database.
+    ```bash
+    yarn migrate
+    ```

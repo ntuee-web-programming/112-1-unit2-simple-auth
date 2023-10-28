@@ -12,6 +12,10 @@ export const signInApi = async ({ email, password }: SignInRequest) => {
     method: "POST",
     body: JSON.stringify({ email, password }),
   });
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.error);
+  }
   const data: SignInResponse = await response.json();
   return data;
 };
@@ -23,6 +27,10 @@ export const signUpApi = async ({ email, password, name }: SignUpRequest) => {
     method: "POST",
     body: JSON.stringify({ email, password, name }),
   });
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.error);
+  }
   const data: SignInResponse = await response.json();
   return data;
 };

@@ -1,20 +1,18 @@
 import bodyParser from "body-parser";
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
 
 import { signIn, signUp } from "./controllers/auth";
-import userRoutes from "./routes/users";
-
-dotenv.config();
+import todoRoutes from "./routes/todos";
+import { env } from "./utils/env";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use("/users", userRoutes);
+app.use("/todos", todoRoutes);
 app.post("/signin", signIn);
 app.post("/signup", signUp);
 

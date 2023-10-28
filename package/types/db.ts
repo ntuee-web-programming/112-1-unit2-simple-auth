@@ -3,6 +3,10 @@ export type User = {
   name: string;
   email: string;
   hashedPassword: string;
-  createdAt: string;
-  updatedAt: string;
+};
+
+export type Todo = {
+  id: string;
+  userId: User["id"];
+  content: string;
 };
