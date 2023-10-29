@@ -14,7 +14,7 @@ export const usersTable = pgTable(
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
     name: varchar("name", { length: 50 }).notNull(),
     email: varchar("email", { length: 50 }).notNull().unique(),
-    hashedPassword: varchar("hashed-password", { length: 50 }).notNull(),
+    hashedPassword: varchar("hashed-password", { length: 100 }).notNull(),
   },
   (table) => ({
     emailIndex: index("email_index").on(table.email),
