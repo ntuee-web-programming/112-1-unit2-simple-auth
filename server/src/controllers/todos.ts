@@ -10,11 +10,11 @@ import { eq } from "drizzle-orm";
 import { Request, Response } from "express";
 
 export const getTodos = async (
-  req: Request<never, never, never, GetTodosRequest>,
+  req: Request<never, never, never, GetTodosRequest> & { userId?: string },
   res: Response<GetTodosResponse | { error: string }>,
 ) => {
   try {
-    const { userId } = req.query;
+    const userId = req.userId as string;
     console.log("[getTodos]");
     console.log("userId", userId);
     const todos = await db
@@ -37,11 +37,12 @@ export const getTodos = async (
 };
 
 export const createTodo = async (
-  req: Request<never, never, CreateTodoRequest>,
+  req: Request<never, never, CreateTodoRequest> & { userId?: string },
   res: Response<CreateTodoResponse | { error: string }>,
 ) => {
   try {
-    const { content, userId } = req.body;
+    const { content } = req.body;
+    const userId = req.userId as string;
     console.log("[createTodo]");
     console.log("content", content);
     console.log("userId", userId);

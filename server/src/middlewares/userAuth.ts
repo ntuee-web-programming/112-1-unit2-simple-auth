@@ -1,3 +1,4 @@
+// We want to extend the Express Request type to add the userId
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
@@ -5,7 +6,7 @@ import jwt from "jsonwebtoken";
 // A middleware is a function that runs before the controller
 // We can use it to check if the user is authenticated and protect certain routes
 export const userAuth = async (
-  req: Request,
+  req: Request & { userId?: string },
   res: Response,
   next: NextFunction,
 ) => {
@@ -24,7 +25,11 @@ export const userAuth = async (
     const verified = jwt.verify(token, process.env.JWT_SECRET!);
     // Take a look at the content of verified
     console.log("verified", verified);
-
+    // The token contains the userId
+    const userId = (verified as { userId: string }).userId;
+    console.log("userId", userId);
+    // Attach the user to the request
+    req.userId = userId;
     next();
   } catch (err) {
     console.error(err);

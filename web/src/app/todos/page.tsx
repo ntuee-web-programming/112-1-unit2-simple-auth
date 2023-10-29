@@ -28,6 +28,14 @@ function Todos() {
         },
       });
       const data = await response.json();
+      if (!response.ok) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch todos",
+          variant: "destructive",
+        });
+        return;
+      }
       setTodos(data);
     };
     fetchTodos();
@@ -46,20 +54,32 @@ function Todos() {
           />
           <Button
             onClick={async () => {
-              const userId = localStorage.getItem("userId");
+              // Step 9: Create todos
+              // To create todos, which is a protected resource,
+              // we need to send the token in the header.
+
+              const token = localStorage.getItem("jwt-token");
               console.log(content);
               const response = await fetch("/api/todos", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                   content: content,
-                  userId: userId,
                 }),
               });
               const data = await response.json();
               console.log(data);
+              if (!response.ok) {
+                toast({
+                  title: "Error",
+                  description: "Failed to create todo",
+                  variant: "destructive",
+                });
+                return;
+              }
               setTodos((prev) => [...prev, data]);
               setContent("");
             }}
@@ -77,10 +97,15 @@ function Todos() {
                 <span>{todo.content}</span>
                 <Button
                   onClick={async () => {
+                    // Step 9: Delete todos
+                    // To delete todos, which is a protected resource,
+                    // we need to send the token in the header.
+                    const token = localStorage.getItem("jwt-token");
                     const response = await fetch(`/api/todos/${todo.id}`, {
                       method: "DELETE",
                       headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
                       },
                     });
                     if (response.ok) {
