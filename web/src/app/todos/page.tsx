@@ -5,11 +5,14 @@ import React, { useEffect, useState } from "react";
 import { type Todo } from "@package/types/db";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 function Todos() {
   const [content, setContent] = useState("");
   const [todos, setTodos] = useState<Omit<Todo, "userId">[]>([]);
+  const { toast } = useToast();
   useEffect(() => {
     const fetchTodos = async () => {
       const userId = localStorage.getItem("userId");
@@ -59,12 +62,37 @@ function Todos() {
             Add
           </Button>
         </div>
-        <div className="w-full">
+        <div className="flex w-full flex-col gap-2">
           {todos.map((todo) => {
             return (
-              <div key={todo.id} className="flex w-full items-center gap-4">
+              <Card
+                key={todo.id}
+                className="flex w-full items-center justify-between gap-4 p-3"
+              >
                 <span>{todo.content}</span>
-              </div>
+                <Button
+                  onClick={async () => {
+                    const response = await fetch(`/api/todos/${todo.id}`, {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    });
+                    if (response.ok) {
+                      setTodos((prev) => prev.filter((t) => t.id !== todo.id));
+                    } else {
+                      toast({
+                        title: "Error",
+                        description: "Failed to delete todo",
+                        variant: "destructive",
+                      });
+                    }
+                  }}
+                  variant={"ghost"}
+                >
+                  <span>Complete</span>
+                </Button>
+              </Card>
             );
           })}
         </div>

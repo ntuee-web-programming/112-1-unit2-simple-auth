@@ -60,3 +60,18 @@ export const createTodo = async (
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const deleteTodo = async (
+  req: Request<{ id: string }>,
+  res: Response<null | { error: string }>,
+) => {
+  try {
+    const { id } = req.params;
+    console.log("[deleteTodo]");
+    console.log("id", id);
+    await db.delete(todosTable).where(eq(todosTable.displayId, id)).execute();
+    return res.status(200).send();
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
