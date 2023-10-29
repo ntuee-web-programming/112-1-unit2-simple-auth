@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { type Todo } from "@package/types/db";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
