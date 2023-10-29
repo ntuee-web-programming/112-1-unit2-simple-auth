@@ -35,14 +35,14 @@ function AuthForm() {
   const handleSignIn = async () => {
     // handle sign in
     try {
-      const {
-        user: { id },
-      } = await signInApi({ email, password });
+      // Step 7: Sign in user
+      // We now have to save the token in local storage
+      const { token: token } = await signInApi({ email, password });
       toast({
         title: "Success",
         description: "Sign in successful",
       });
-      localStorage.setItem("userId", id);
+      localStorage.setItem("jwt-token", token);
       router.push("/todos");
     } catch (error) {
       toast({
@@ -74,10 +74,10 @@ function AuthForm() {
       return;
     }
     try {
-      const {
-        user: { id },
-      } = await signUpApi({ email, name, password });
-      localStorage.setItem("userId", id);
+      // Step 8: Save token in local storage
+      // The same as sign in
+      const { token: token } = await signUpApi({ email, name, password });
+      localStorage.setItem("jwt-token", token);
       toast({
         title: "Success",
         description: "Sign up successful",

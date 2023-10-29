@@ -15,11 +15,16 @@ function Todos() {
   const { toast } = useToast();
   useEffect(() => {
     const fetchTodos = async () => {
-      const userId = localStorage.getItem("userId");
-      const response = await fetch(`/api/todos?userId=${userId}`, {
+      // Step 9: Fetch todos
+      // To fetch todos, which is a protected resource,
+      // we need to send the token in the header.
+      const token = localStorage.getItem("jwt-token");
+      const response = await fetch(`/api/todos`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          // Note the Bearer prefix
+          Authorization: `Bearer ${token}`,
         },
       });
       const data = await response.json();
