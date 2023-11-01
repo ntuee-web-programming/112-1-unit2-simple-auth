@@ -1,3 +1,54 @@
+# Install guide
+## Instsall packages
+```bash
+cd ./web
+yarn
+cd ../server
+yarn
+cd ../package
+yarn
+```
+## Environment variables
+### Web
+Create `./web/.env.local` file and add the following lines:
+```text
+NEXT_PUBLIC_API_URL=http://localhost:4000
+```
+### Server
+Create `./server/.env` file and add the following lines:
+```text
+PORT=4000
+POSTGRES_URL=postgres://postgres:postgres@localhost:5432/simple-auth
+JWT_SECRET=A_RANDOM_STRING_THAT_SHOULD_BE_REGULARLY_CHANGED
+JWT_EXPIRES_IN=1h
+```
+`JWT_SECRET` can be any random string
+
+# Run guide
+1. Start the database
+    ```bash
+    cd ./server
+    docker compose up -d
+    ```
+    You can use `docker compose down` to stop the database.
+    Also, you can use `yarn drizzle-kit studio` to open the database GUI on `http://localhost:4983`.
+2. Migrate the database
+    ```bash
+    cd ./server
+    yarn migrate
+    ``` 
+3. Start the server
+    ```bash
+    cd ./server
+    yarn dev
+    ```
+4. Start the web
+    ```bash
+    cd ./web
+    yarn dev
+    ```
+5. Go to `http://localhost:3000` in your browser
+
 # Setup guide
 1. Create folers
     Create two folders: `web`, `package` and `server` in the root directory of the project.
@@ -35,7 +86,7 @@ In the `web` folder, follow the below instructions to setup Prettier and ESLint.
     ```
 2. Install eslint and eslint plugins
     ```bash
-    yarn add -D eslint-config-prettier @typescript-eslint/eslint-plugin
+    yarn add -D eslint typescript @typescript-eslint/parser eslint-config-prettier @typescript-eslint/eslint-plugin
     ```
 3. Copy and paste the `./web/.eslintrc.json` file and `./web.prettierrc.cjs` file from this repo to your project root
 
@@ -134,7 +185,7 @@ In the `server` folder, follow the below instructions to setup Prettier and ESLi
     ```
 2. Install eslint and eslint plugins
     ```bash
-    yarn add -D eslint-config-prettier @typescript-eslint/eslint-plugin
+    yarn add -D eslint typescript @typescript-eslint/parser eslint-config-prettier @typescript-eslint/eslint-plugin
     ```
 3. Copy and paste the `./server/prettierrc.cjs` file from this repo to your project root.
 
@@ -296,3 +347,22 @@ If you completed all the steps above, you should be able to run `yarn dev` in th
     ```bash
     yarn migrate
     ```
+
+## Package folder setup
+### Init yarn
+In the `package` folder, run `yarn init -y` to create a NodeJS project.
+```bash
+cd ./package
+yarn init -y
+```
+### Prettier and ESLint setup
+In the `package` folder, follow the below instructions to setup Prettier and ESLint.
+1. Install prettier and prettier plugins
+    ```bash
+    yarn add -D prettier prettier-plugin-tailwindcss @trivago/prettier-plugin-sort-imports
+    ```
+2. Install eslint and eslint plugins
+    ```bash
+    yarn add -D eslint typescript @typescript-eslint/parser eslint-config-prettier @typescript-eslint/eslint-plugin
+    ```
+3. Copy and paste the `./package/.eslintrc.json` file and `./package.prettierrc.cjs` file from this repo to your project root
