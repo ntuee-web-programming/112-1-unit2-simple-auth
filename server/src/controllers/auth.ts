@@ -34,7 +34,7 @@ export const signUp = async (
       return res.status(400).json({ error: "User already exists" });
     }
 
-    // Step 1: Hash password
+    // Hash password
     // We use bcrypt to hash the password
     const hashedPassword = await bcrypt.hash(password, 12);
     // We can take a look at the hashed password
@@ -54,7 +54,7 @@ export const signUp = async (
       })
       .returning();
 
-    // Step 2: Create json web token
+    // Create json web token
     // We use jwt to create a json web token
     const token = jwt.sign(
       {
@@ -111,14 +111,14 @@ export const signIn = async (
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Step 4: Compare password
+    // Compare password
     // We use bcrypt to compare the password since the password in DB is hashed
     const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid password" });
     }
 
-    // Step 5: Create json web token
+    // Create json web token
     // Same as signUp
     const token = jwt.sign(
       {

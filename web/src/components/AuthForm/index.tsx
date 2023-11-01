@@ -35,7 +35,7 @@ function AuthForm() {
   const handleSignIn = async () => {
     // handle sign in
     try {
-      // Step 7: Sign in user
+      // Sign in user
       // We now have to save the token in local storage
       const { token: token } = await signInApi({ email, password });
       toast({
@@ -74,7 +74,7 @@ function AuthForm() {
       return;
     }
     try {
-      // Step 8: Save token in local storage
+      // Save token in local storage
       // The same as sign in
       const { token: token } = await signUpApi({ email, name, password });
       localStorage.setItem("jwt-token", token);

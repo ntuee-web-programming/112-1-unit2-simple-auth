@@ -15,7 +15,7 @@ function Todos() {
   const { toast } = useToast();
   useEffect(() => {
     const fetchTodos = async () => {
-      // Step 9: Fetch todos
+      // Fetch todos
       // To fetch todos, which is a protected resource,
       // we need to send the token in the header.
       const token = localStorage.getItem("jwt-token");
@@ -54,12 +54,12 @@ function Todos() {
           />
           <Button
             onClick={async () => {
-              // Step 9: Create todos
+              // Create todos
               // To create todos, which is a protected resource,
               // we need to send the token in the header.
 
               const token = localStorage.getItem("jwt-token");
-              console.log(content);
+
               const response = await fetch("/api/todos", {
                 method: "POST",
                 headers: {
@@ -71,7 +71,7 @@ function Todos() {
                 }),
               });
               const data = await response.json();
-              console.log(data);
+
               if (!response.ok) {
                 toast({
                   title: "Error",
@@ -97,7 +97,7 @@ function Todos() {
                 <span>{todo.content}</span>
                 <Button
                   onClick={async () => {
-                    // Step 9: Delete todos
+                    // Delete todos
                     // To delete todos, which is a protected resource,
                     // we need to send the token in the header.
                     const token = localStorage.getItem("jwt-token");

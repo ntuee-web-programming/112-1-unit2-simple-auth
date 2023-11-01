@@ -1,8 +1,7 @@
-// We want to extend the Express Request type to add the userId
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-// Step 10: Create userAuth middleware
+// Create userAuth middleware
 // A middleware is a function that runs before the controller
 // We can use it to check if the user is authenticated and protect certain routes
 export const userAuth = async (
