@@ -33,6 +33,7 @@ JWT_EXPIRES_IN=1h
     You can use `docker compose down` to stop the database.
     Also, you can use `yarn drizzle-kit studio` to open the database GUI on `http://localhost:4983`.
 2. Migrate the database
+    * Note: you might need to wait for a minute or two for the database to be ready.
     ```bash
     cd ./server
     yarn migrate
