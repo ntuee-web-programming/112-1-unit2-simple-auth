@@ -11,6 +11,7 @@ import bcrypt from "bcrypt";
 import { eq, sql } from "drizzle-orm";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 
 export const signUp = async (
   req: Request<never, never, SignUpRequest>,
@@ -40,6 +41,7 @@ export const signUp = async (
     // We can take a look at the hashed password
     console.log("password", password);
     console.log("hashedPassword", hashedPassword);
+    // Note that you should not console.log the sensitive information in production
 
     // Create user
     const [user] = await db
@@ -47,6 +49,7 @@ export const signUp = async (
       .values({
         name,
         email,
+        displayId: uuidv4(),
         // We store the hashed password in the database, so that even if the database is compromised,
         // the attacker will not be able to see the password
         // It is important to never store the password in plain text

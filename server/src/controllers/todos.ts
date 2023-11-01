@@ -8,6 +8,7 @@ import {
 } from "@package/types/api";
 import { eq } from "drizzle-orm";
 import { Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
 
 export const getTodos = async (
   req: Request<never, never, never, GetTodosRequest> & { userId?: string },
@@ -51,6 +52,7 @@ export const createTodo = async (
       .values({
         content,
         userId,
+        displayId: uuidv4(),
       })
       .returning();
     return res.status(201).json({

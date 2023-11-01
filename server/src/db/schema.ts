@@ -1,17 +1,10 @@
-import {
-  index,
-  pgTable,
-  serial,
-  text,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { index, pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable(
   "users",
   {
     id: serial("id").primaryKey(),
-    displayId: uuid("display_id").defaultRandom().notNull().unique(),
+    displayId: varchar("display_id", { length: 50 }).notNull().unique(),
     name: varchar("name", { length: 50 }).notNull(),
     email: varchar("email", { length: 50 }).notNull().unique(),
     hashedPassword: varchar("hashed-password", { length: 100 }).notNull(),
@@ -25,8 +18,8 @@ export const todosTable = pgTable(
   "todos",
   {
     id: serial("id").primaryKey(),
-    displayId: uuid("display_id").defaultRandom().notNull().unique(),
-    userId: uuid("user_id").notNull(),
+    displayId: varchar("display_id", { length: 50 }).notNull().unique(),
+    userId: varchar("user_id", { length: 50 }).notNull(),
     content: text("content").notNull(),
   },
   (table) => ({
